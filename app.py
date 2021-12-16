@@ -13,7 +13,7 @@ from data_manipulation import import_data
 from weather_visuals import icons
 import calendar
 
-live, aqi_hist, weather_pred, pol_stats, region_df = import_data()
+live, today_live, aqi_hist, weather_pred, pol_stats, region_df = import_data()
 
 
 def weather_description():
@@ -189,7 +189,7 @@ def weather_pre(states):
     Output("gen_metrics_icons", 'src'),
     [Input("states", "value")])
 def general_metrics(states):
-    daily_metrics = live[live['state']==states]
+    daily_metrics = today_live[today_live['state']==states]
     daily_metrics['hour'] = daily_metrics['UTC_time'].str[:2]
     daily_metrics['hour'] = daily_metrics['hour'].astype(str).astype(int)
     daily_metrics = daily_metrics.loc[daily_metrics.groupby(['state','UTC_date'])['hour'].idxmax()]

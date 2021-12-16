@@ -65,4 +65,4 @@ def import_data():
     region_df = region_df[['state', 'city','date','region','pop',' pm25', ' o3', ' pm10', ' no2',' so2', ' co']]
     region_df = region_df.fillna(0)
 
-    return live , historic , weather_pred, pol_stats, region_df 
+    return live , today_live, historic , weather_pred, pol_stats, region_df 
