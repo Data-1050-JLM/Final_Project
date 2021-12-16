@@ -48,6 +48,15 @@ def import_data():
     pol_stats = pol_stats[['state','aqi']]
     pol_stats['aqi'].replace('-', '0', inplace=True)
     pol_stats['aqi'] = pol_stats['aqi'].astype(float)
+    
+    usa_stats = today_live.copy()
+    usa_stats['hour'] = pd.DatetimeIndex(usa_stats['UTC_time']).hour
+    usa_stats = usa_stats[['UTC_time', 'state', 'city', 'aqi', 'hour']]
+    usa_stats = usa_stats.loc[usa_stats.groupby(['city', 'state'])['hour'].idxmax()]
+    usa_stats = usa_stats.dropna(axis = 0)
+    usa_stats = usa_stats[['hour', 'aqi']]
+    usa_stats['aqi'] = usa_stats['aqi'].astype(float)
+    usa_stats = usa_stats.groupby(['hour'], as_index = False)['aqi'].mean().round(2)
 
     states = {'Alaska':['AK','O',733391],'Alabama':['AL', 'S',5024279],'Arkansas':['AR','S',3011524], 'Arizona':['AZ','W',7151502],'California':['CA','W',39538223], 'Colorado':['CO','W',5773714], 'Connecticut':['CT','N',3605944],'Delaware':['DE','N',989948],'Florida':['FL','S',21538187],'Georgia':['GA','S',10711908],'Hawaii':['HI','O',1455271],'Iowa':['IA','M',3190369],'Idaho':['ID','W',1839106],'Illinois':['IL','M',12812508],'Indiana':['IN','M',6785528],'Kansas':['KS', 'M',2937880],'Kentucky':['KY', 'S',4505836], 'Louisiana':['LA','S',4657757],'Massachusetts':['MA','N',7029917],'Maryland':['MD','N',6177224],'Maine':['ME','N',1362359],'Michigan':['MI','W',10077331],'Minnesota':['MN','M',5706494], 'Montana':['MO','M',6154913], 'Mississippi':['MS','S',2961279],'Montana':['MT','W',1084225],'North Carolina':['NC','S',10439388], 'North Dakota':['ND','M',779094],'Nebraska':['NE','W',1961504],'New Hampshire':['NH','N',1377529],'New Jersey':['NJ','N',9288994], 'New Mexico':['NM','W',2117522], 'Nevada':['NV','W',3104614],'New York':['NY','N',20201249],'Ohio':['OH','M',11799448],'Oklahoma':['OK','S',3959353], 'Oregon':['OR','W',4237256], 'Pennsylvania':['PA', 'N',13002700],'Rhode Island':['RI','N',1097379],'South Carolina':['SC','S',5118425], 'South Dakota':['SD','M',886667],'Tennessee':['TN','S',6910840], 'Texas':['TX','S',29145505], 'Utah':['UT','W',3271616], 'Virginia':['VA','S',8631393], 'Vermont':['VT','N',643077], 'Washington':['WA','W',7705281],'Wisconsin':['WI','M',5893718],'West Virginia':['WV','S',1793716], 'Wyoming':['WY','W',576851]}
     state_abrev = {}
@@ -65,4 +74,4 @@ def import_data():
     region_df = region_df[['state', 'city','date','region','pop',' pm25', ' o3', ' pm10', ' no2',' so2', ' co']]
     region_df = region_df.fillna(0)
 
-    return live , today_live, historic , weather_pred, pol_stats, region_df 
+    return live , today_live, historic , weather_pred, pol_stats, region_df, usa_stats
