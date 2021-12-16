@@ -192,8 +192,8 @@ def general_metrics(states):
     daily_metrics = live[live['state']==states]
     daily_metrics['hour'] = daily_metrics['UTC_time'].str[:2]
     daily_metrics['hour'] = daily_metrics['hour'].astype(str).astype(int)
-    daily_metrics = daily_metrics.loc[daily_metrics.groupby(['city', 'state','UTC_date'])['hour'].idxmax()]
-    daily_metrics = daily_metrics[['city', 'state','Temperature', 'feels_like','weather_description']]
+    daily_metrics = daily_metrics.loc[daily_metrics.groupby(['state','UTC_date'])['hour'].idxmax()]
+    daily_metrics = daily_metrics[['state','Temperature', 'feels_like','weather_description']]
     
     fig1 = go.Figure(go.Indicator(
     mode = "number",
