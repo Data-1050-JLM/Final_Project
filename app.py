@@ -40,6 +40,7 @@ def air_quality_historic_description():
         ## Air Pollutants Over The Past Year
         
         ##### Note: the graphs below may take up to 30 seconds to load!
+        ##### The bubble size below represents state population.
         ''', className='eleven columns', style={'paddingLeft': '5%'})], className="row")
 
 def heatmap(): 
