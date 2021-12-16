@@ -13,7 +13,7 @@ from data_manipulation import import_data
 from weather_visuals import icons
 import calendar
 
-live, today_live, aqi_hist, weather_pred, pol_stats, region_df = import_data()
+live, today_live, aqi_hist, weather_pred, pol_stats, region_df, usa_stats = import_data()
 
 
 def weather_description():
@@ -210,10 +210,10 @@ def general_metrics(states):
     domain = {'x': [0, 1], 'y': [0, 1]}))
 
     cur_state = pol_stats[pol_stats['state'].eq(states)]
+    cur_state = cur_state.iloc[-1:]
     cur_state = cur_state.melt(id_vars=["state"], 
         var_name="Pollution", 
         value_name="Value")
-
 
     fig3 = go.Figure(go.Indicator(
     mode = "number",
@@ -224,7 +224,7 @@ def general_metrics(states):
 
     fig4 = go.Figure(go.Indicator(
     mode = "number",
-    value = pol_stats.aqi.mean(),
+    value = usa_stats.aqi[0],
         number = {'font': {"size":65 }},
         title = {"text": "Average State AQI<br><span style='font-size:0.8em;color:gray'>Overall</span>"},
     domain = {'x': [0, 1], 'y': [0, 1]}))
